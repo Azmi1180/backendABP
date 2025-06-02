@@ -56,4 +56,15 @@ class AuthController extends Controller
     {
         return response()->json(Auth::user());
     }
+
+    // In AuthController.php
+    public function showLoginForm()
+    {
+        return view('auth.login');
+    }
+
+    public function showRegistrationForm()
+    {
+        return view('auth.register');
+    }
 }
