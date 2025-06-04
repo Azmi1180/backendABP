@@ -1,40 +1,37 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AuthController; 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\DigestController;
-// use App\Http\Controllers\CategoryController; // We'll create this too
 
-Route::get('/', function () {
-    return response()->json(['message' => 'Welcome to News Aggregator API']);
-});
 
-// --- Authentication ---
-Route::post('/register', [AuthController::class, 'register']);
+
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
-Route::get('/me', [AuthController::class, 'me'])->middleware('auth');
+Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
+Route::get('/welcome', function () {
+    return view('welcome');
+})->name('welcome');
 
-// --- News Articles (Public) ---
-Route::get('/articles', [ArticleController::class, 'index']); // News Feed Display, Filtering, Search
-Route::get('/articles/{article}', [ArticleController::class, 'show']); // Single article view
+// Home page
+Route::get('/', [ArticleController::class, 'index'])->name('home');
+Route::get('/home', [ArticleController::class, 'index'])->name('home.alias');
 
+// AI Features
+Route::post('/daily-digest/generate', [DigestController::class, 'generateDailyDigest'])->name('digest.generate')->middleware('auth');
+Route::get('/articles/{article}/summarize', [ArticleController::class, 'showSummary'])->name('articles.summarize.view')->middleware('auth'); // To show a summary
 
-// --- AI Features (Public, but could be authenticated) ---
-Route::get('/articles/{article}/summarize', [ArticleController::class, 'summarize']); // Article Summarization
-Route::get('/daily-digest', [DigestController::class, 'generateDailyDigest']); // AI Daily Digest
-
-
-// --- User Specific Features (Authenticated) ---
 Route::middleware('auth')->group(function () {
-    Route::post('/articles/{article}/save', [ArticleController::class, 'saveForLater']);
-    Route::delete('/articles/{article}/unsave', [ArticleController::class, 'unsaveArticle']);
-    Route::get('/saved-articles', [ArticleController::class, 'listSaved']);
+    Route::post('/articles/{article}/save', [ArticleController::class, 'saveForLater'])->name('articles.save');
+    Route::delete('/articles/{article}/unsave', [ArticleController::class, 'unsaveArticle'])->name('articles.unsave');
+    Route::get('/saved-articles', [ArticleController::class, 'listSaved'])->name('articles.saved');
 });
 
-// --- Categories (Optional - for listing categories) ---
+
 Route::get('/categories', function() {
-    return response()->json(\App\Models\Category::all());
-});
+    return \App\Models\Category::all(); 
+})->name('categories.index');
