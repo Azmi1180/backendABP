@@ -175,11 +175,6 @@
             <p class="col-span-full text-center text-gray-500 py-10">No articles found.</p>
         @endforelse
     </div>
-
-    @if($articles->hasPages())
-    <div class="mt-8">
-        {{ $articles->links() }} {{-- Tailwind pagination views should be set up --}}
-    </div>
-    @endif
+    
 
 @endsection

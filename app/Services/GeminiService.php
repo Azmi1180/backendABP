@@ -10,7 +10,7 @@ class GeminiService
 {
     protected string $apiKey;
     protected string $baseUrl = 'https://generativelanguage.googleapis.com/v1beta';    
-    protected string $defaultModel = 'gemini-2.0-flash';
+    protected string $defaultModel = 'gemini-1.5-flash';
 
 
     public function __construct()
@@ -30,7 +30,6 @@ class GeminiService
 
         $endpoint = "{$this->baseUrl}/models/{$model}:generateContent?key={$this->apiKey}";
         Log::info("Sending request to Gemini. Endpoint: {$endpoint}");
-        // Log::debug("Request Body: ", $requestBody); // Uncomment for deep debugging of request body
 
         try {
             $response = Http::timeout($timeout)

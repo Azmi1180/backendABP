@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use App\Services\GeminiService; // Assuming your manual service is still named this
+use App\Services\GeminiService;
 use Illuminate\Support\Facades\Auth;
 
 class ArticleController extends Controller
@@ -17,7 +17,7 @@ class ArticleController extends Controller
         $this->geminiService = $geminiService;
     }
 
-    public function index(Request $request) // For home page
+    public function index(Request $request) 
     {
         $query = Article::with('category')->orderBy('published_at', 'desc');
 
@@ -39,23 +39,18 @@ class ArticleController extends Controller
             });
         }
 
-        $articles = $query->paginate(9); // 9 articles for a 3-col grid
-        $categories = Category::orderBy('name')->get();
-        // Get unique sources for filter dropdown
+        $articles = $query->paginate(9);
+        $categories = Category::orderBy('name')->get();        
         $sources = Article::select('source')->distinct()->orderBy('source')->pluck('source');
 
 
         return view('home', compact('articles', 'categories', 'sources'));
     }
-
-    // For displaying AI summary on a separate view or in a modal section
+    
     public function showSummary(Article $article)
     {
-        $summary = $this->geminiService->summarizeText($article->content);
-        // You could have a dedicated view for this or pass to the article detail view
-        return view('articles.summary', compact('article', 'summary'));
-        // Or redirect back with session data if you want to show it on the same page
-        // return back()->with('summary_for_'.$article->id, $summary);
+        $summary = $this->geminiService->summarizeText($article->content);        
+        return view('articles.summary', compact('article', 'summary'));        
     }
 
 
@@ -82,10 +77,11 @@ class ArticleController extends Controller
     {
         $user = Auth::user();
         $savedArticles = $user->savedArticles()
-                              ->with('category') // Eager load category
-                              ->orderBy('pivot_created_at', 'desc')
-                              ->paginate(9);
-        $categories = Category::orderBy('name')->get(); // For filters if you add them
+                              ->with('category') 
+                              ->limit(9)
+                            ->offset(0)
+                            ->get();
+        $categories = Category::orderBy('name')->get();
         $sources = $user->savedArticles()->select('source')->distinct()->orderBy('source')->pluck('source');
 
 

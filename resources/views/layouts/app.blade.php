@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf- खाना">
+<head>    
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}"> {{-- For AJAX if needed --}}
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'NewsAIgle') }} - @yield('title')</title>
+    <title>{{ config('app.name', 'InstanNews') }} - @yield('title')</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js']) {{-- Assuming Vite setup --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     {{-- For Lucide Icons (if you want to use them similarly) - CDN option --}}
     <script src="https://unpkg.com/lucide-static@latest/ro"></script>
@@ -34,7 +33,7 @@
             <div class="p-4">
                 <div class="text-xl font-bold mb-8 flex items-center justify-between">
                     <a href="{{ route('home') }}" class="flex items-center gap-2">
-                        <i data-lucide="newspaper" class="w-6 h-6"></i> NewsAIgle
+                        <i data-lucide="newspaper" class="w-6 h-6"></i> InstanNews
                     </a>
                     <button class="lg:hidden" onclick="toggleSidebar()">
                         <i data-lucide="x" class="w-5 h-5"></i>
@@ -73,7 +72,7 @@
                         <i data-lucide="menu" class="w-6 h-6"></i>
                     </button>
                     <i data-lucide="newspaper" class="w-6 h-6"></i>
-                    <span class="text-xl font-bold text-gray-800">NewsAIgle</span>
+                    <span class="text-xl font-bold text-gray-800">InstanNews</span>
                 </div>
             </div>
 

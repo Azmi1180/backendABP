@@ -14,17 +14,21 @@ class AuthController extends Controller
     {
         $request->validate([
             'username' => 'required|string|unique:users|min:3|max:255',
-            'password' => 'required|string|min:6', // password_confirmation field needed
+            'password' => 'required|string|min:6',
         ]);
 
         $user = User::create([
             'username' => $request->username,
-            'password' => Hash::make($request->password), // Hash::make already does this
+            'password' => Hash::make($request->password),
         ]);
 
-        Auth::login($user); // Log the user in immediately after registration
-
-        return response()->json(['message' => 'User registered successfully', 'user' => $user], 201);
+        Auth::login($user);
+        
+        if ($request->wantsJson()) {
+            return response()->json(['message' => 'User registered successfully', 'user' => $user], 201);
+        }
+        
+        return redirect('/home');
     }
 
     public function login(Request $request)
@@ -36,7 +40,11 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return response()->json(['message' => 'Login successful', 'user' => Auth::user()]);
+            if ($request->wantsJson()) {
+                return response()->json(['message' => 'User registered successfully', 'user' => $user], 201);
+            }
+            
+            return redirect('/home');
         }
 
         throw ValidationException::withMessages([

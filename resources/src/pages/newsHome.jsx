@@ -115,7 +115,7 @@ export default function NewsHome() {
                         <div className="text-xl font-bold mb-8 flex items-center justify-between">
                             <div className="flex items-center gap-2">
                                 <Newspaper className="w-6 h-6" />
-                                NewsAIgle
+                                InstanNews
                             </div>
                             <button 
                                 className="lg:hidden"
